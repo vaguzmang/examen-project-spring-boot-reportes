@@ -1,0 +1,28 @@
+<div class="module-view fade-in">
+    <div class="page-head">
+        <div>
+            <h2>Reportes</h2>
+            <p>Lectura ejecutiva del inventario y la rotación de productos.</p>
+        </div>
+        <button class="btn btn-secondary" id="printReportButton">Imprimir reporte</button>
+    </div>
+
+    <div class="kpi-grid report-kpis" id="reportKpis"></div>
+
+    <div class="dashboard-grid">
+        <article class="panel">
+            <div class="panel-head">
+                <h3>Stock total por bodega</h3>
+                <span>Participación sobre el inventario</span>
+            </div>
+            <div class="warehouse-bars" id="reportWarehouseBars"></div>
+        </article>
+        <article class="panel">
+            <div class="panel-head">
+                <h3>Productos más movidos</h3>
+                <span>Unidades registradas</span>
+            </div>
+            <div class="activity-list" id="topProductsList"></div>
+        </article>
+    </div>
+</div>
