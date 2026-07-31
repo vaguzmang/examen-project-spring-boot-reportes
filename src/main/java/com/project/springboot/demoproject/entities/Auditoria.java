@@ -56,6 +56,20 @@ public class Auditoria {
     @Column(name = "entidad_id")
     private Long entidadId;
 
+    /**
+     * ===== CAMPOS AGREGADOS PARA EL MÓDULO DEL EXAMEN =====
+     */
+
+    @Column(name = "producto_id")
+    private Long productoId;
+
+    @Column(name = "campo_modificado", length = 100)
+    private String campoModificado;
+
+    /**
+     * =====================================================
+     */
+
     @Lob
     @Column(name = "valores_anteriores")
     private String valoresAnteriores;
