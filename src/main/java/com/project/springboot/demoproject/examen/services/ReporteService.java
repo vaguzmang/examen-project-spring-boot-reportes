@@ -10,11 +10,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.project.springboot.demoproject.entities.Auditoria;
 import com.project.springboot.demoproject.entities.Movimiento;
 import com.project.springboot.demoproject.entities.MovimientoDetalle;
+import com.project.springboot.demoproject.enums.TipoMovimiento;
 import com.project.springboot.demoproject.examen.dto.ReporteAuditoriaDto;
 import com.project.springboot.demoproject.examen.dto.ReporteMovimientoDto;
 import com.project.springboot.demoproject.repositories.AuditoriaRepository;
 import com.project.springboot.demoproject.repositories.MovimientoRepository;
-import com.project.springboot.demoproject.enums.TipoMovimiento;
 
 import lombok.RequiredArgsConstructor;
 
@@ -99,7 +99,7 @@ public class ReporteService {
 
             dto.setUsuario(
                     auditoria.getUsuario() != null
-                            ? auditoria.getUsuario().getNombre()
+                            ? auditoria.getUsuario().getUsername()
                             : null);
 
             dto.setCampoModificado(auditoria.getCampoModificado());
