@@ -15,4 +15,6 @@ public interface OrdenCompraRepository extends JpaRepository<OrdenCompra, Long> 
     List<OrdenCompra> findAllByOrderByFechaCreacionDesc();
 
     long countByEstado(EstadoOrdenCompra estado);
+
+    boolean existsByProveedorId(Long proveedorId);
 }
