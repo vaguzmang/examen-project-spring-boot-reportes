@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.project.springboot.demoproject.dto.ProductoRequest;
 import com.project.springboot.demoproject.dto.ProductoResponse;
 import com.project.springboot.demoproject.entities.Producto;
+import com.project.springboot.demoproject.entities.Proveedor;
 import com.project.springboot.demoproject.exception.DuplicateResourceException;
 import com.project.springboot.demoproject.exception.ResourceNotFoundException;
 import com.project.springboot.demoproject.repositories.InventarioBodegaRepository;
@@ -21,13 +22,16 @@ public class ProductoService {
 
     private final ProductoRepository productoRepository;
     private final InventarioBodegaRepository inventarioBodegaRepository;
+    private final ProveedorService proveedorService;
 
+    @Transactional(readOnly = true)
     public List<ProductoResponse> listarTodos() {
         return productoRepository.findAll().stream()
                 .map(p -> ProductoResponse.desde(p, stockTotal(p.getId())))
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     public ProductoResponse obtenerPorId(Long id) {
         Producto producto = buscarPorId(id);
         return ProductoResponse.desde(producto, stockTotal(id));
@@ -41,10 +45,13 @@ public class ProductoService {
     @Transactional
     public ProductoResponse crear(ProductoRequest request) {
         if (productoRepository.existsByNombre(request.getNombre())) {
-            throw new DuplicateResourceException("Ya existe un producto con el nombre '" + request.getNombre() + "'");
+            throw new DuplicateResourceException(
+                    "Ya existe un producto con el nombre '" + request.getNombre() + "'");
         }
+
         Producto producto = new Producto();
         mapear(request, producto);
+
         Producto guardado = productoRepository.save(producto);
         return ProductoResponse.desde(guardado, 0);
     }
@@ -53,6 +60,7 @@ public class ProductoService {
     public ProductoResponse actualizar(Long id, ProductoRequest request) {
         Producto producto = buscarPorId(id);
         mapear(request, producto);
+
         Producto guardado = productoRepository.save(producto);
         return ProductoResponse.desde(guardado, stockTotal(id));
     }
@@ -63,12 +71,14 @@ public class ProductoService {
         productoRepository.delete(producto);
     }
 
+    @Transactional(readOnly = true)
     public List<ProductoResponse> buscarPorCategoria(String categoria) {
         return productoRepository.findByCategoriaIgnoreCase(categoria).stream()
                 .map(p -> ProductoResponse.desde(p, stockTotal(p.getId())))
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     public List<ProductoResponse> buscarPorNombre(String nombre) {
         return productoRepository.findByNombreContainingIgnoreCase(nombre).stream()
                 .map(p -> ProductoResponse.desde(p, stockTotal(p.getId())))
@@ -76,13 +86,24 @@ public class ProductoService {
     }
 
     private Integer stockTotal(Long productoId) {
-        Integer total = inventarioBodegaRepository.obtenerStockTotalPorProducto(productoId);
+        Integer total =
+                inventarioBodegaRepository.obtenerStockTotalPorProducto(productoId);
+
         return total == null ? 0 : total;
     }
 
     private void mapear(ProductoRequest request, Producto producto) {
-        producto.setNombre(request.getNombre());
-        producto.setCategoria(request.getCategoria());
+        producto.setNombre(request.getNombre().trim());
+        producto.setCategoria(request.getCategoria().trim());
         producto.setPrecio(request.getPrecio());
+
+        Long proveedorId = request.getProveedorPrincipalId();
+
+        if (proveedorId == null) {
+            producto.setProveedorPrincipal(null);
+        } else {
+            Proveedor proveedor = proveedorService.buscarPorId(proveedorId);
+            producto.setProveedorPrincipal(proveedor);
+        }
     }
 }

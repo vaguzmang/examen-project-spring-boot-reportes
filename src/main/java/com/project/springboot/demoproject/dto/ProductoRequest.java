@@ -22,4 +22,8 @@ public class ProductoRequest {
     @NotNull(message = "El precio es obligatorio")
     @DecimalMin(value = "0.0", inclusive = true, message = "El precio no puede ser negativo")
     private BigDecimal precio;
+
+    // Opcional. Un producto sin proveedor principal no participa
+    // en la generación automática de riesgo / orden de compra.
+    private Long proveedorPrincipalId;
 }
