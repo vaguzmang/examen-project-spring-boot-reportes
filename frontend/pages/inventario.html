@@ -1,0 +1,269 @@
+<div class="module-view fade-in">
+
+    <div class="page-head">
+        <div>
+            <h2>Inventario por bodega</h2>
+            <p>
+                Existencias reales calculadas a partir de
+                entradas, salidas y transferencias.
+            </p>
+        </div>
+
+        <div
+            id="inventoryMainActions"
+            style="
+                display:flex;
+                gap:.6rem;
+                flex-wrap:wrap
+            ">
+
+            <button
+                class="btn btn-primary"
+                id="inventoryEntryButton">
+                + Ingresar existencias
+            </button>
+
+            <button
+                class="btn btn-secondary"
+                id="inventoryExitButton">
+                − Retirar existencias
+            </button>
+
+            <button
+                class="btn btn-secondary"
+                id="inventoryTransferButton">
+                ⇄ Transferir
+            </button>
+
+        </div>
+    </div>
+
+
+    <div class="module-toolbar">
+
+        <div class="search-box">
+            <input
+                id="inventorySearch"
+                type="search"
+                placeholder="Buscar producto o bodega">
+        </div>
+
+        <select
+            id="warehouseFilter"
+            class="toolbar-select"
+            aria-label="Filtrar por bodega">
+        </select>
+
+        <label
+            style="
+                display:flex;
+                align-items:center;
+                gap:6px;
+                font-size:.85rem;
+                cursor:pointer
+            ">
+
+            <input
+                type="checkbox"
+                id="lowStockToggle">
+
+            Solo stock bajo (&lt; 10)
+
+        </label>
+
+        <span
+            class="badge badge-blue"
+            id="inventoryCount">
+            0 registros
+        </span>
+
+    </div>
+
+
+    <div class="table-card">
+
+        <div class="table-scroll inventory-table-scroll">
+
+            <table class="inventory-table">
+
+                <thead>
+                    <tr>
+                        <th>Bodega</th>
+                        <th>Producto</th>
+                        <th>Existencias</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+
+                <tbody id="inventoryTableBody"></tbody>
+
+            </table>
+
+        </div>
+
+        <div
+            class="table-footer"
+            id="inventoryTableFooter">
+            Cargando inventario...
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         MODAL OPERACIÓN DE INVENTARIO
+         ===================================================== -->
+
+    <div
+        class="modal"
+        id="inventoryOperationModal"
+        aria-hidden="true">
+
+        <div class="modal-card">
+
+            <div class="modal-head">
+
+                <h3 id="inventoryOperationTitle">
+                    Operación de inventario
+                </h3>
+
+                <button
+                    class="icon-button modal-close"
+                    type="button">
+                    ×
+                </button>
+
+            </div>
+
+
+            <form id="inventoryOperationForm">
+
+                <div class="modal-body form-grid">
+
+                    <input
+                        type="hidden"
+                        id="inventoryOperationType">
+
+
+                    <div class="form-group form-span">
+
+                        <label for="inventoryOperationProduct">
+                            Producto
+                        </label>
+
+                        <select
+                            id="inventoryOperationProduct"
+                            required>
+                        </select>
+
+                    </div>
+
+
+                    <div
+                        class="form-group"
+                        id="inventoryOriginGroup">
+
+                        <label for="inventoryOrigin">
+                            Bodega de origen
+                        </label>
+
+                        <select id="inventoryOrigin">
+                        </select>
+
+                    </div>
+
+
+                    <div
+                        class="form-group"
+                        id="inventoryDestinationGroup">
+
+                        <label for="inventoryDestination">
+                            Bodega de destino
+                        </label>
+
+                        <select id="inventoryDestination">
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="inventoryQuantity">
+                            Cantidad
+                        </label>
+
+                        <input
+                            id="inventoryQuantity"
+                            type="number"
+                            min="1"
+                            step="1"
+                            value="1"
+                            required>
+
+                    </div>
+
+
+                    <div
+                        class="form-group"
+                        id="inventoryAvailableGroup">
+
+                        <label>
+                            Existencias disponibles
+                        </label>
+
+                        <div
+                            id="inventoryAvailableStock"
+                            style="
+                                min-height:42px;
+                                display:flex;
+                                align-items:center;
+                                font-weight:800
+                            ">
+                            —
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="form-span"
+                        id="inventoryOperationHelp"
+                        style="
+                            padding:.8rem;
+                            border-radius:10px;
+                            background:var(--slate-50,#f8fafc);
+                            color:var(--text-muted,#6b7280);
+                            font-size:.85rem;
+                            line-height:1.55
+                        ">
+                    </div>
+
+                </div>
+
+
+                <div class="modal-foot">
+
+                    <button
+                        class="btn btn-secondary modal-close"
+                        type="button">
+                        Cancelar
+                    </button>
+
+                    <button
+                        class="btn btn-primary"
+                        type="submit"
+                        id="inventoryOperationSubmit">
+                        Registrar
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>

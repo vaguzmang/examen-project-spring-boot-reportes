@@ -1,0 +1,266 @@
+<div class="module-view fade-in">
+
+    <div class="page-head">
+        <div>
+            <h2>Productos</h2>
+            <p>
+                Catálogo general, proveedor principal y
+                disponibilidad real por bodega.
+            </p>
+        </div>
+
+        <button
+            class="btn btn-primary"
+            id="newProductButton">
+            + Nuevo producto
+        </button>
+    </div>
+
+
+    <div class="module-toolbar">
+
+        <div class="search-box">
+            <input
+                id="productSearch"
+                type="search"
+                placeholder="Buscar producto, categoría o proveedor">
+        </div>
+
+        <span
+            class="badge badge-amber"
+            id="lowStockCount">
+            0 con stock bajo
+        </span>
+
+        <span
+            class="badge badge-blue"
+            id="productCount">
+            0 productos
+        </span>
+
+    </div>
+
+
+    <div class="table-card">
+
+        <div class="table-scroll product-table-scroll">
+
+            <table class="product-table">
+
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Producto</th>
+                        <th>Categoría</th>
+                        <th>Proveedor principal</th>
+                        <th>Stock total</th>
+                        <th>Precio</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+
+                <tbody id="productTableBody"></tbody>
+
+            </table>
+
+        </div>
+
+        <div
+            class="table-footer"
+            id="productTableFooter">
+            Cargando productos...
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         CREAR / EDITAR PRODUCTO
+         ===================================================== -->
+
+    <div
+        class="modal"
+        id="productModal"
+        aria-hidden="true">
+
+        <div class="modal-card">
+
+            <div class="modal-head">
+
+                <h3 id="productModalTitle">
+                    Nuevo producto
+                </h3>
+
+                <button
+                    class="icon-button modal-close"
+                    type="button">
+                    ×
+                </button>
+
+            </div>
+
+
+            <form id="productForm">
+
+                <div class="modal-body form-grid">
+
+                    <input
+                        type="hidden"
+                        id="productId">
+
+
+                    <div class="form-group">
+
+                        <label for="productName">
+                            Nombre
+                        </label>
+
+                        <input
+                            id="productName"
+                            type="text"
+                            required
+                            maxlength="150">
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="productCategory">
+                            Categoría
+                        </label>
+
+                        <input
+                            id="productCategory"
+                            type="text"
+                            required
+                            maxlength="100">
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="productPrice">
+                            Precio
+                        </label>
+
+                        <input
+                            id="productPrice"
+                            type="number"
+                            min="0"
+                            step="0.01"
+                            required>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="productSupplier">
+                            Proveedor principal
+                        </label>
+
+                        <select id="productSupplier">
+                        </select>
+
+                    </div>
+
+
+                    <div
+                        class="form-span"
+                        style="
+                            padding:.8rem;
+                            border-radius:10px;
+                            background:var(--slate-50,#f8fafc);
+                            font-size:.85rem;
+                            color:var(--text-muted,#6b7280)
+                        ">
+
+                        El stock no se edita en este formulario.
+                        Se modifica únicamente mediante
+                        <strong>ENTRADA</strong>,
+                        <strong>SALIDA</strong> o
+                        <strong>TRANSFERENCIA</strong>.
+
+                        <br><br>
+
+                        Un producto sin proveedor principal
+                        no participa en el proceso automático
+                        de riesgo y reabastecimiento.
+
+                    </div>
+
+                </div>
+
+
+                <div class="modal-foot">
+
+                    <button
+                        class="btn btn-secondary modal-close"
+                        type="button">
+                        Cancelar
+                    </button>
+
+                    <button
+                        class="btn btn-primary"
+                        type="submit">
+                        Guardar producto
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         STOCK POR BODEGA
+         ===================================================== -->
+
+    <div
+        class="modal"
+        id="productStockModal"
+        aria-hidden="true">
+
+        <div class="modal-card">
+
+            <div class="modal-head">
+
+                <h3 id="productStockTitle">
+                    Stock por bodega
+                </h3>
+
+                <button
+                    class="icon-button modal-close"
+                    type="button">
+                    ×
+                </button>
+
+            </div>
+
+
+            <div
+                class="modal-body"
+                id="productStockBody">
+            </div>
+
+
+            <div class="modal-foot">
+
+                <button
+                    class="btn btn-secondary modal-close"
+                    type="button">
+                    Cerrar
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

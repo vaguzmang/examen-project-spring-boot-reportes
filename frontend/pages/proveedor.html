@@ -1,0 +1,187 @@
+<div class="module-view fade-in">
+
+    <div class="page-head">
+        <div>
+            <h2>Proveedores</h2>
+            <p>
+                Gestión de proveedores y tiempos de entrega
+                para el abastecimiento de LogiTrack IQ.
+            </p>
+        </div>
+
+        <button
+            class="btn btn-primary"
+            id="newSupplierButton">
+            + Nuevo proveedor
+        </button>
+    </div>
+
+
+    <div class="module-toolbar">
+
+        <div class="search-box">
+            <input
+                id="supplierSearch"
+                type="search"
+                placeholder="Buscar por nombre o contacto">
+        </div>
+
+        <span
+            class="badge badge-blue"
+            id="supplierCount">
+            0 proveedores
+        </span>
+
+    </div>
+
+
+    <div class="table-card">
+
+        <div class="table-scroll">
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Proveedor</th>
+                        <th>Contacto</th>
+                        <th>Días de entrega</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+
+                <tbody id="supplierTableBody"></tbody>
+
+            </table>
+
+        </div>
+
+        <div
+            class="table-footer"
+            id="supplierTableFooter">
+            Cargando proveedores...
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         MODAL CREAR / EDITAR
+         ===================================================== -->
+
+    <div
+        class="modal"
+        id="supplierModal"
+        aria-hidden="true">
+
+        <div class="modal-card">
+
+            <div class="modal-head">
+
+                <h3 id="supplierModalTitle">
+                    Nuevo proveedor
+                </h3>
+
+                <button
+                    class="icon-button modal-close"
+                    type="button">
+                    ×
+                </button>
+
+            </div>
+
+
+            <form id="supplierForm">
+
+                <div class="modal-body form-grid">
+
+                    <input
+                        type="hidden"
+                        id="supplierId">
+
+
+                    <div class="form-group">
+
+                        <label for="supplierName">
+                            Nombre
+                        </label>
+
+                        <input
+                            id="supplierName"
+                            type="text"
+                            maxlength="150"
+                            required>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="supplierContact">
+                            Contacto
+                        </label>
+
+                        <input
+                            id="supplierContact"
+                            type="text"
+                            maxlength="200"
+                            placeholder="Teléfono, correo o contacto comercial">
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="supplierDeliveryDays">
+                            Días de entrega
+                        </label>
+
+                        <input
+                            id="supplierDeliveryDays"
+                            type="number"
+                            min="1"
+                            max="90"
+                            step="1"
+                            required>
+
+                    </div>
+
+
+                    <p
+                        class="form-span"
+                        style="
+                            font-size:.85rem;
+                            color:var(--text-muted,#6b7280)
+                        ">
+                        Los días de entrega son utilizados por
+                        LogiTrack IQ para calcular el punto de
+                        reorden de los productos asociados.
+                    </p>
+
+                </div>
+
+
+                <div class="modal-foot">
+
+                    <button
+                        class="btn btn-secondary modal-close"
+                        type="button">
+                        Cancelar
+                    </button>
+
+                    <button
+                        class="btn btn-primary"
+                        type="submit">
+                        Guardar proveedor
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>

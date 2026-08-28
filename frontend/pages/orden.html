@@ -1,0 +1,260 @@
+<div class="module-view fade-in">
+
+    <div class="page-head">
+        <div>
+            <h2>Órdenes de compra</h2>
+            <p>
+                Gestión del abastecimiento, aprobación,
+                recepción y documentos PDF.
+            </p>
+        </div>
+
+        <button
+            class="btn btn-primary"
+            id="newOrderButton">
+            + Nueva orden
+        </button>
+    </div>
+
+
+    <div class="module-toolbar">
+
+        <div class="search-box">
+            <input
+                id="orderSearch"
+                type="search"
+                placeholder="Buscar producto, proveedor o bodega">
+        </div>
+
+        <select
+            id="orderStatusFilter"
+            class="toolbar-select">
+            <option value="">Todos los estados</option>
+            <option value="BORRADOR">BORRADOR</option>
+            <option value="APROBADA">APROBADA</option>
+            <option value="RECIBIDA">RECIBIDA</option>
+            <option value="CANCELADA">CANCELADA</option>
+        </select>
+
+        <span
+            class="badge badge-blue"
+            id="orderCount">
+            0 órdenes
+        </span>
+
+    </div>
+
+
+    <div class="table-card">
+
+        <div class="table-scroll">
+
+            <table class="order-table">
+
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Fecha</th>
+                        <th>Producto</th>
+                        <th>Proveedor</th>
+                        <th>Destino</th>
+                        <th>Cantidad</th>
+                        <th>Total</th>
+                        <th>Estado</th>
+                        <th>PDF</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+
+                <tbody id="orderTableBody"></tbody>
+
+            </table>
+
+        </div>
+
+        <div
+            class="table-footer"
+            id="orderTableFooter">
+            Cargando órdenes...
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         MODAL CREAR
+         ===================================================== -->
+
+    <div
+        class="modal"
+        id="orderModal"
+        aria-hidden="true">
+
+        <div class="modal-card">
+
+            <div class="modal-head">
+
+                <h3>Nueva orden de compra</h3>
+
+                <button
+                    class="icon-button modal-close"
+                    type="button">
+                    ×
+                </button>
+
+            </div>
+
+
+            <form id="orderForm">
+
+                <div class="modal-body form-grid">
+
+                    <div class="form-group form-span">
+                        <label for="orderProduct">
+                            Producto
+                        </label>
+
+                        <select
+                            id="orderProduct"
+                            required>
+                        </select>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="orderSupplier">
+                            Proveedor
+                        </label>
+
+                        <select
+                            id="orderSupplier"
+                            required>
+                        </select>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="orderWarehouse">
+                            Bodega destino
+                        </label>
+
+                        <select
+                            id="orderWarehouse"
+                            required>
+                        </select>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="orderQuantity">
+                            Cantidad
+                        </label>
+
+                        <input
+                            id="orderQuantity"
+                            type="number"
+                            min="1"
+                            step="1"
+                            value="1"
+                            required>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="orderUnitPrice">
+                            Precio unitario
+                        </label>
+
+                        <input
+                            id="orderUnitPrice"
+                            type="number"
+                            min="0.01"
+                            step="0.01"
+                            required>
+                    </div>
+
+
+                    <p
+                        class="form-span"
+                        style="
+                            font-size:.85rem;
+                            color:var(--text-muted,#6b7280)
+                        ">
+                        Toda orden nueva se crea en estado
+                        <strong>BORRADOR</strong>.
+                        El total es calculado por el servidor.
+                    </p>
+
+                </div>
+
+
+                <div class="modal-foot">
+
+                    <button
+                        class="btn btn-secondary modal-close"
+                        type="button">
+                        Cancelar
+                    </button>
+
+                    <button
+                        class="btn btn-primary"
+                        type="submit">
+                        Crear BORRADOR
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         MODAL DETALLE
+         ===================================================== -->
+
+    <div
+        class="modal"
+        id="orderDetailModal"
+        aria-hidden="true">
+
+        <div class="modal-card">
+
+            <div class="modal-head">
+
+                <h3 id="orderDetailTitle">
+                    Detalle de orden
+                </h3>
+
+                <button
+                    class="icon-button modal-close"
+                    type="button">
+                    ×
+                </button>
+
+            </div>
+
+
+            <div
+                class="modal-body"
+                id="orderDetailBody">
+            </div>
+
+
+            <div class="modal-foot">
+
+                <button
+                    class="btn btn-secondary modal-close"
+                    type="button">
+                    Cerrar
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

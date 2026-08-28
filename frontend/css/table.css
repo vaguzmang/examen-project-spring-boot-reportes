@@ -1,0 +1,498 @@
+.module-toolbar {
+    display: flex;
+    margin-bottom: 17px;
+    align-items: center;
+    gap: 12px;
+    justify-content: space-between;
+}
+
+.search-box {
+    position: relative;
+    width: min(330px, 100%);
+}
+
+.search-box::before {
+    position: absolute;
+    top: 50%;
+    left: 14px;
+    color: var(--slate-400);
+    content: "⌕";
+    transform: translateY(-50%);
+}
+
+.search-box input {
+    width: 100%;
+    height: 42px;
+    padding: 0 14px 0 39px;
+    background: var(--white);
+    border: 1px solid var(--slate-200);
+    border-radius: 10px;
+}
+
+.toolbar-select {
+    min-width: 190px;
+    height: 42px;
+    padding: 0 36px 0 13px;
+    color: var(--slate-700);
+    background: var(--white);
+    border: 1px solid var(--slate-200);
+    border-radius: 10px;
+    font: inherit;
+    cursor: pointer;
+}
+
+.toolbar-select:focus {
+    border-color: var(--blue-500);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, .12);
+    outline: 0;
+}
+
+.table-card {
+    overflow: hidden;
+    background: var(--white);
+    border: 1px solid var(--slate-200);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+}
+
+.table-scroll {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    padding: 14px 17px;
+    border-bottom: 1px solid var(--slate-100);
+    text-align: left;
+    white-space: nowrap;
+}
+
+th {
+    color: var(--slate-500);
+    background: var(--slate-50);
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+td {
+    color: var(--slate-700);
+    font-size: 13px;
+}
+
+tbody tr {
+    transition: background var(--transition);
+}
+
+tbody tr:hover {
+    background: #f8fbff;
+}
+
+tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.cell-title {
+    color: var(--slate-900);
+    font-weight: 700;
+}
+
+.badge {
+    display: inline-flex;
+    padding: 5px 9px;
+    align-items: center;
+    gap: 6px;
+    border-radius: 99px;
+    font-size: 10px;
+    font-weight: 800;
+}
+
+.badge-blue {
+    color: var(--blue-700);
+    background: var(--blue-100);
+}
+
+.badge-green {
+    color: var(--green-600);
+    background: var(--green-100);
+}
+
+.badge-amber {
+    color: var(--amber-600);
+    background: var(--amber-100);
+}
+
+.badge-red {
+    color: var(--red-600);
+    background: var(--red-100);
+}
+
+.badge-purple {
+    color: var(--purple-600);
+    background: var(--purple-100);
+}
+
+.table-actions {
+    display: flex;
+    gap: 7px;
+}
+
+.action-button {
+    display: grid;
+    width: 31px;
+    height: 31px;
+    place-items: center;
+    color: var(--slate-600);
+    background: var(--slate-100);
+    border: 0;
+    border-radius: 8px;
+}
+
+.action-button:hover {
+    color: var(--blue-700);
+    background: var(--blue-100);
+}
+
+.action-button.danger:hover {
+    color: var(--red-600);
+    background: var(--red-100);
+}
+
+.table-footer {
+    padding: 13px 17px;
+    color: var(--slate-500);
+    background: var(--slate-50);
+    border-top: 1px solid var(--slate-200);
+    font-size: 11px;
+}
+
+
+/* ===== TABLA ORDENES LOGITRACK IQ ===== */
+
+.order-table {
+    width: 100%;
+    table-layout: fixed;
+}
+
+.order-table th,
+.order-table td {
+    padding: 12px 9px;
+}
+
+.order-table th:nth-child(1),
+.order-table td:nth-child(1) {
+    width: 4%;
+}
+
+.order-table th:nth-child(2),
+.order-table td:nth-child(2) {
+    width: 12%;
+    white-space: normal;
+}
+
+.order-table th:nth-child(3),
+.order-table td:nth-child(3) {
+    width: 16%;
+    white-space: normal;
+}
+
+.order-table th:nth-child(4),
+.order-table td:nth-child(4) {
+    width: 14%;
+    white-space: normal;
+}
+
+.order-table th:nth-child(5),
+.order-table td:nth-child(5) {
+    width: 11%;
+    white-space: normal;
+}
+
+.order-table th:nth-child(6),
+.order-table td:nth-child(6) {
+    width: 7%;
+}
+
+.order-table th:nth-child(7),
+.order-table td:nth-child(7) {
+    width: 11%;
+}
+
+.order-table th:nth-child(8),
+.order-table td:nth-child(8) {
+    width: 9%;
+}
+
+.order-table th:nth-child(9),
+.order-table td:nth-child(9) {
+    width: 8%;
+}
+
+.order-table th:nth-child(10),
+.order-table td:nth-child(10) {
+    width: 12%;
+}
+
+.order-table .table-actions {
+    gap: 4px;
+    flex-wrap: wrap;
+}
+
+.order-table .action-button {
+    width: 29px;
+    height: 29px;
+    font-size: 10px;
+}
+
+@media (max-width: 1100px) {
+    .order-table {
+        min-width: 1050px;
+        table-layout: auto;
+    }
+}
+
+
+/* ===== MOVIMIENTOS LOGITRACK IQ ===== */
+
+/*
+ * La tabla tiene scroll propio para mantener los encabezados visibles,
+ * similar a "Inmovilizar fila superior" en una hoja de cálculo.
+ */
+.movement-table-scroll {
+    max-height: calc(100vh - 330px);
+    min-height: 300px;
+    overflow: auto;
+}
+
+
+/* Tabla más compacta */
+.movement-table {
+    width: 100%;
+    min-width: 980px;
+    table-layout: fixed;
+}
+
+.movement-table th,
+.movement-table td {
+    padding: 10px 11px;
+    font-size: 12px;
+}
+
+
+/* Encabezado congelado */
+.movement-table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    background: var(--slate-50);
+    box-shadow: 0 1px 0 var(--slate-200);
+}
+
+
+/* Primera columna fija al desplazarse horizontalmente */
+.movement-table th:first-child,
+.movement-table td:first-child {
+    position: sticky;
+    left: 0;
+    width: 55px;
+}
+
+.movement-table th:first-child {
+    z-index: 7;
+    background: var(--slate-50);
+}
+
+.movement-table td:first-child {
+    z-index: 3;
+    background: var(--white);
+}
+
+.movement-table tbody tr:hover td:first-child {
+    background: #f8fbff;
+}
+
+
+/* Anchos optimizados */
+.movement-table th:nth-child(2),
+.movement-table td:nth-child(2) {
+    width: 145px;
+}
+
+.movement-table th:nth-child(3),
+.movement-table td:nth-child(3) {
+    width: 105px;
+}
+
+.movement-table th:nth-child(4),
+.movement-table td:nth-child(4) {
+    width: 100px;
+}
+
+.movement-table th:nth-child(5),
+.movement-table td:nth-child(5),
+.movement-table th:nth-child(6),
+.movement-table td:nth-child(6) {
+    width: 125px;
+}
+
+
+/*
+ * Productos puede contener varios artículos.
+ * Permitimos salto de línea en vez de ensanchar toda la tabla.
+ */
+.movement-table th:nth-child(7),
+.movement-table td:nth-child(7) {
+    width: 320px;
+    white-space: normal;
+    line-height: 1.4;
+}
+
+
+/* Toolbar de movimientos más manejable */
+.module-toolbar {
+    flex-wrap: wrap;
+}
+
+
+/* En pantallas pequeñas se mantiene el scroll */
+@media (max-width: 1100px) {
+    .movement-table-scroll {
+        max-height: calc(100vh - 300px);
+    }
+}
+
+/* ===== PRODUCTOS LOGITRACK IQ ===== */
+
+.product-table {
+    width: 100%;
+    table-layout: fixed;
+}
+
+.product-table th,
+.product-table td {
+    padding: 11px 12px;
+}
+
+.product-table th:nth-child(1),
+.product-table td:nth-child(1) {
+    width: 5%;
+}
+
+.product-table th:nth-child(2),
+.product-table td:nth-child(2) {
+    width: 22%;
+    white-space: normal;
+}
+
+.product-table th:nth-child(3),
+.product-table td:nth-child(3) {
+    width: 14%;
+}
+
+.product-table th:nth-child(4),
+.product-table td:nth-child(4) {
+    width: 20%;
+    white-space: normal;
+}
+
+.product-table th:nth-child(5),
+.product-table td:nth-child(5) {
+    width: 14%;
+}
+
+.product-table th:nth-child(6),
+.product-table td:nth-child(6) {
+    width: 14%;
+}
+
+.product-table th:nth-child(7),
+.product-table td:nth-child(7) {
+    width: 11%;
+}
+
+.product-table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 4;
+}
+
+@media (max-width: 1100px) {
+    .product-table {
+        min-width: 950px;
+        table-layout: auto;
+    }
+}
+
+/* ===== INVENTARIO LOGITRACK IQ ===== */
+
+.inventory-table-scroll {
+    max-height: calc(100vh - 340px);
+    min-height: 320px;
+    overflow: auto;
+}
+
+.inventory-table {
+    width: 100%;
+    table-layout: fixed;
+}
+
+.inventory-table th,
+.inventory-table td {
+    padding: 11px 13px;
+}
+
+.inventory-table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    background: var(--slate-50);
+    box-shadow: 0 1px 0 var(--slate-200);
+}
+
+.inventory-table th:nth-child(1),
+.inventory-table td:nth-child(1) {
+    width: 24%;
+}
+
+.inventory-table th:nth-child(2),
+.inventory-table td:nth-child(2) {
+    width: 31%;
+    white-space: normal;
+}
+
+.inventory-table th:nth-child(3),
+.inventory-table td:nth-child(3) {
+    width: 14%;
+}
+
+.inventory-table th:nth-child(4),
+.inventory-table td:nth-child(4) {
+    width: 14%;
+}
+
+.inventory-table th:nth-child(5),
+.inventory-table td:nth-child(5) {
+    width: 17%;
+}
+
+.inventory-table .table-actions {
+    gap: 5px;
+}
+
+@media (max-width: 900px) {
+
+    .inventory-table {
+        min-width: 760px;
+        table-layout: auto;
+    }
+
+    .inventory-table-scroll {
+        max-height: calc(100vh - 300px);
+    }
+}
