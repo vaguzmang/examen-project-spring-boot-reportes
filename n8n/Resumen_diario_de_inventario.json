@@ -1,0 +1,155 @@
+{
+  "name": "Resumen diario de inventario",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 6 * * *"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -688,
+        -176
+      ],
+      "id": "b0564db0-4b99-4e29-ada8-7f195e3a264b",
+      "name": "Todos los días 6:00 AM"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "Ejecuta la operación diaria de inventario de LogiTrack IQ.\n\nFecha de esta ejecución en America/Bogota:\n{{ $now.setZone('America/Bogota').toFormat('yyyy-MM-dd') }}\n\nSigue estrictamente este orden:\n1. consultar_kpis\n2. consultar_productos_en_riesgo\n3. consultar_bodegas_criticas\n\nSi existe al menos un producto en riesgo:\n- trabaja únicamente con el PRIMER producto retornado;\n- llama consultar_stock_producto(productoId);\n- toma el precio REAL retornado por esa herramienta;\n- calcula la cantidad exactamente con:\n  ceil(max(1, puntoReorden * 2 - stockTotal))\n- crea como máximo UNA orden usando crear_orden_borrador;\n- usa productoId, proveedorId y bodegaDestinoId obtenidos de las herramientas;\n- usa el precio real como precioUnitario;\n- deja la orden en BORRADOR.\n\nSi no existen productos en riesgo, NO crees ninguna orden.\n\nFinalmente llama publicar_resumen y publica el resumen diario usando exclusivamente datos reales de las herramientas.\n\nNunca apruebes, canceles ni recibas órdenes.\nNunca accedas directamente a MySQL.\nNunca inventes IDs, precios ni resultados.\nSi una herramienta falla, no inventes información: informa claramente el fallo y no ejecutes acciones que dependan de ese resultado.",
+        "options": {
+          "systemMessage": "Eres el agente operativo de LogiTrack IQ y debes cumplir el skill operacion-logitrack.\n\nFUENTE DE VERDAD\nLa API Spring Boot, accedida únicamente mediante las herramientas MCP, es la única fuente de verdad.\n\nHERRAMIENTAS\nUsa exclusivamente:\n- consultar_stock_producto\n- consultar_bodegas_criticas\n- consultar_productos_en_riesgo\n- consultar_kpis\n- crear_orden_borrador\n- publicar_resumen\n\nSECUENCIA OBLIGATORIA\n1. consultar_kpis.\n2. consultar_productos_en_riesgo.\n3. consultar_bodegas_criticas.\n4. Si hay riesgo, usa solo el primer producto.\n5. consultar_stock_producto(productoId) para obtener el precio real.\n6. cantidad = ceil(max(1, puntoReorden * 2 - stockTotal)).\n7. Crea como máximo UNA orden BORRADOR por ejecución.\n8. Publica el resumen diario.\n\nCREACIÓN DE ORDEN\nPara crear_orden_borrador usa únicamente valores reales:\n- productoId: del primer producto en riesgo.\n- proveedorId: del primer producto en riesgo.\n- bodegaDestinoId: del primer producto en riesgo.\n- cantidad: resultado entero de la fórmula.\n- precioUnitario: campo precio retornado por consultar_stock_producto.\nSi el precio no existe o no es mayor que cero, no inventes un precio y no crees la orden.\n\nPROHIBICIONES\n- Nunca aprobar órdenes.\n- Nunca cancelar órdenes.\n- Nunca recibir órdenes.\n- Nunca crear movimientos manuales.\n- Nunca acceder directamente a MySQL.\n- Nunca inventar IDs, precios, stock, KPIs o resultados.\n- Nunca crear más de una orden BORRADOR en la misma ejecución.\n\nPUBLICAR RESUMEN\nAl llamar publicar_resumen, sus argumentos deben tener la forma:\n{\n  \"resumen\": {\n    \"fecha\": \"YYYY-MM-DD\",\n    \"narrativa\": \"texto entre 20 y 500 caracteres\",\n    \"alertas\": [],\n    \"accionesSugeridas\": []\n  }\n}\n\nDentro de resumen deben existir EXACTAMENTE estas cuatro propiedades de nivel superior:\nfecha, narrativa, alertas, accionesSugeridas.\nNo agregues otras propiedades.\n\nLa fecha debe ser la fecha indicada en el mensaje de ejecución para America/Bogota.\nLa narrativa debe tener entre 20 y 500 caracteres.\nalertas y accionesSugeridas siempre deben ser arreglos.\n\nCada alerta puede usar únicamente:\n{\n  \"mensaje\": \"...\",\n  \"severidad\": \"BAJA|MEDIA|ALTA\",\n  \"ordenId\": 123,\n  \"productoId\": 123,\n  \"bodegaId\": 123\n}\nUna alerta debe referenciar al menos un ID real. Incluye únicamente los IDs que realmente apliquen.\n\nCada acción sugerida debe usar:\n{\n  \"tipo\": \"REVISAR_ORDEN|REVISAR_PRODUCTO|REVISAR_BODEGA\",\n  \"descripcion\": \"...\",\n  \"ordenId\": 123\n}\no productoId o bodegaId según corresponda.\nCada acción debe contener EXACTAMENTE uno de ordenId, productoId o bodegaId y ese ID debe existir.\n\nSI NO HAY RIESGO\n- no crear ninguna orden;\n- publicar igualmente el resumen;\n- indicar en narrativa que no se detectaron productos bajo el punto de reorden;\n- usar alertas/acciones solo si los datos reales lo justifican.\n\nMANEJO DE ERRORES\nSi una herramienta MCP falla:\n- no inventes resultados;\n- no asumas que la operación se realizó;\n- informa qué herramienta falló y el error;\n- no ejecutes acciones posteriores que dependan del resultado fallido.\n\nAl finalizar responde brevemente qué consultas realizaste, si se creó o no una orden BORRADOR y si el resumen fue publicado.",
+          "enableStreaming": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -464,
+        -80
+      ],
+      "id": "c97a19cb-9c7f-4bb3-8eb0-30b5b5f4894a",
+      "name": "AI Agent1",
+      "retryOnFail": true,
+      "waitBetweenTries": 5000,
+      "maxTries": 3
+    },
+    {
+      "parameters": {
+        "endpointUrl": "http://host.docker.internal:3001/mcp",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+      "typeVersion": 1.4,
+      "position": [
+        -328,
+        152
+      ],
+      "id": "f29a4e0b-b341-430d-b2ee-46ffb0be9c48",
+      "name": "MCP Client1"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3.6-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        -448,
+        160
+      ],
+      "id": "414bf9de-7ab9-4f73-832d-634b3f4824f3",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "tk6wfBzyM0yq1FGE",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -688,
+        16
+      ],
+      "id": "db08f85f-ed2e-4374-9d2a-3d832fdf4609",
+      "name": "When clicking ‘Execute workflow’"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Todos los días 6:00 AM": {
+      "main": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MCP Client1": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner",
+    "executionTimeout": -1,
+    "availableInMCP": false
+  },
+  "versionId": "6637283c-40bd-474c-b9a2-6a91f12e8036",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "093a8c2aadb5f5408c37fc4b2cdafbf4f1fa12bbf500ab0298bce360805361c1"
+  },
+  "nodeGroups": [],
+  "id": "ahFVJ3BKtVTjgFof",
+  "tags": []
+}
