@@ -67,6 +67,7 @@ public class InventarioCalculoService {
         return StockProductoResponse.builder()
                 .productoId(producto.getId())
                 .nombreProducto(producto.getNombre())
+                .precio(producto.getPrecio())
                 .stockTotal(total)
                 .bodegas(bodegas)
                 .build();

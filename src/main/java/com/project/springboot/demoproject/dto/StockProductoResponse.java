@@ -1,5 +1,6 @@
 package com.project.springboot.demoproject.dto;
 
+import java.math.BigDecimal;
 import java.util.List;
 import lombok.Builder;
 import lombok.Data;
@@ -10,6 +11,7 @@ public class StockProductoResponse {
 
     private Long productoId;
     private String nombreProducto;
+    private BigDecimal precio;
     private Integer stockTotal;
     private List<StockBodega> bodegas;
 
