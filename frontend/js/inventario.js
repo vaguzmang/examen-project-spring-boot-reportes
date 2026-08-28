@@ -127,6 +127,23 @@ async function iniciarInventario() {
 
         llenarSelectsInventario();
 
+        const bodegaPendiente =
+            sessionStorage.getItem(
+                "logitrack_inventory_warehouse_filter"
+            );
+
+        if (bodegaPendiente) {
+
+            document
+                .getElementById("warehouseFilter")
+                .value =
+                    bodegaPendiente;
+
+            sessionStorage.removeItem(
+                "logitrack_inventory_warehouse_filter"
+            );
+        }
+
         await cargarInventario();
 
     } catch (error) {

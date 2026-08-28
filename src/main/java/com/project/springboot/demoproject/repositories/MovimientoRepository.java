@@ -37,6 +37,10 @@ public interface MovimientoRepository extends JpaRepository<Movimiento, Long> {
 
     List<Movimiento> findByBodegaDestinoId(Long bodegaId);
 
+    boolean existsByBodegaOrigenIdOrBodegaDestinoId(
+            Long bodegaOrigenId,
+            Long bodegaDestinoId);
+
     @Query("""
             SELECT m
             FROM Movimiento m

@@ -17,4 +17,6 @@ public interface OrdenCompraRepository extends JpaRepository<OrdenCompra, Long> 
     long countByEstado(EstadoOrdenCompra estado);
 
     boolean existsByProveedorId(Long proveedorId);
+
+    boolean existsByBodegaDestinoId(Long bodegaId);
 }

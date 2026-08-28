@@ -496,3 +496,84 @@ tbody tr:last-child td {
         max-height: calc(100vh - 300px);
     }
 }
+
+/* ===== BODEGAS LOGITRACK IQ ===== */
+
+.warehouse-table-scroll {
+    max-height: calc(100vh - 340px);
+    min-height: 300px;
+    overflow: auto;
+}
+
+.warehouse-table {
+    width: 100%;
+    table-layout: fixed;
+}
+
+.warehouse-table th,
+.warehouse-table td {
+    padding: 10px 10px;
+}
+
+.warehouse-table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    background: var(--slate-50);
+    box-shadow: 0 1px 0 var(--slate-200);
+}
+
+.warehouse-table th:nth-child(1),
+.warehouse-table td:nth-child(1) {
+    width: 5%;
+}
+
+.warehouse-table th:nth-child(2),
+.warehouse-table td:nth-child(2) {
+    width: 14%;
+}
+
+.warehouse-table th:nth-child(3),
+.warehouse-table td:nth-child(3) {
+    width: 16%;
+    white-space: normal;
+}
+
+.warehouse-table th:nth-child(4),
+.warehouse-table td:nth-child(4) {
+    width: 14%;
+    white-space: normal;
+}
+
+.warehouse-table th:nth-child(5),
+.warehouse-table td:nth-child(5) {
+    width: 9%;
+}
+
+.warehouse-table th:nth-child(6),
+.warehouse-table td:nth-child(6) {
+    width: 9%;
+}
+
+.warehouse-table th:nth-child(7),
+.warehouse-table td:nth-child(7) {
+    width: 15%;
+}
+
+.warehouse-table th:nth-child(8),
+.warehouse-table td:nth-child(8) {
+    width: 9%;
+}
+
+.warehouse-table th:nth-child(9),
+.warehouse-table td:nth-child(9) {
+    width: 9%;
+}
+
+@media (max-width: 1100px) {
+
+    .warehouse-table {
+        min-width: 1050px;
+        table-layout: auto;
+    }
+}

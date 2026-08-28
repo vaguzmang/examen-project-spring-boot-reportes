@@ -11,6 +11,8 @@ import com.project.springboot.demoproject.entities.Bodega;
 import com.project.springboot.demoproject.exception.DuplicateResourceException;
 import com.project.springboot.demoproject.exception.ResourceNotFoundException;
 import com.project.springboot.demoproject.repositories.BodegaRepository;
+import com.project.springboot.demoproject.repositories.MovimientoRepository;
+import com.project.springboot.demoproject.repositories.OrdenCompraRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -19,6 +21,8 @@ import lombok.RequiredArgsConstructor;
 public class BodegaService {
 
     private final BodegaRepository bodegaRepository;
+    private final MovimientoRepository movimientoRepository;
+    private final OrdenCompraRepository ordenCompraRepository;
 
     public List<BodegaResponse> listarTodas() {
         return bodegaRepository.findAll().stream().map(BodegaResponse::desde).toList();
@@ -52,7 +56,22 @@ public class BodegaService {
 
     @Transactional
     public void eliminar(Long id) {
+
         Bodega bodega = buscarPorId(id);
+
+        if (movimientoRepository
+                .existsByBodegaOrigenIdOrBodegaDestinoId(id, id)) {
+
+            throw new DuplicateResourceException(
+                    "La bodega posee historial de movimientos y no puede eliminarse");
+        }
+
+        if (ordenCompraRepository.existsByBodegaDestinoId(id)) {
+
+            throw new DuplicateResourceException(
+                    "La bodega posee historial de órdenes de compra y no puede eliminarse");
+        }
+
         bodegaRepository.delete(bodega);
     }
 
