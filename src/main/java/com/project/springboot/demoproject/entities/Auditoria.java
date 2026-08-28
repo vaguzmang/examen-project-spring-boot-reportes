@@ -19,8 +19,6 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
 
 /**
  * Registro de auditoria. Se crea automaticamente por AuditoriaEntityListener
@@ -39,8 +37,7 @@ public class Auditoria {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
-    @Column(name = "tipo_operacion", nullable = false, columnDefinition = "tipo_operacion_auditoria")
+    @Column(name = "tipo_operacion", nullable = false, length = 20)
     private TipoOperacionAuditoria tipoOperacion;
 
     @Column(name = "fecha_hora", nullable = false)

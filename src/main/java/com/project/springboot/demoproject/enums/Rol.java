@@ -9,5 +9,6 @@ package com.project.springboot.demoproject.enums;
 public enum Rol {
     SUPERADMIN,
     ADMIN,
-    EMPLEADO
+    EMPLEADO,
+    AGENTE
 }

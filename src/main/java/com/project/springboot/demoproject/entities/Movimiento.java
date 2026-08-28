@@ -25,8 +25,6 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
 
 @Data
 @NoArgsConstructor
@@ -44,8 +42,7 @@ public class Movimiento implements Auditable {
     private LocalDateTime fecha = LocalDateTime.now();
 
     @Enumerated(EnumType.STRING)
-    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
-    @Column(nullable = false, columnDefinition = "tipo_movimiento")
+    @Column(nullable = false, length = 20)
     private TipoMovimiento tipo;
 
     @ManyToOne(fetch = FetchType.LAZY)

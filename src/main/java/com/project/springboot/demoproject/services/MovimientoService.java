@@ -1,7 +1,9 @@
 package com.project.springboot.demoproject.services;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -39,6 +41,7 @@ public class MovimientoService {
     private final BodegaService bodegaService;
     private final ProductoService productoService;
     private final CurrentUserProvider currentUserProvider;
+    private final InventarioCalculoService inventarioCalculoService;
 
     @Transactional
     public MovimientoResponse registrar(MovimientoRequest request) {
@@ -49,6 +52,8 @@ public class MovimientoService {
 
         Bodega origen = request.getBodegaOrigenId() != null ? bodegaService.buscarPorId(request.getBodegaOrigenId()) : null;
         Bodega destino = request.getBodegaDestinoId() != null ? bodegaService.buscarPorId(request.getBodegaDestinoId()) : null;
+
+        validarStockDesdeMovimientos(request, origen);
 
         Movimiento movimiento = new Movimiento();
         movimiento.setFecha(LocalDateTime.now());
@@ -68,7 +73,6 @@ public class MovimientoService {
 
         for (MovimientoDetalleRequest detalleReq : request.getDetalles()) {
             Producto producto = productoService.buscarPorId(detalleReq.getProductoId());
-            aplicarEfectoEnInventario(request.getTipo(), origen, destino, producto, detalleReq.getCantidad());
 
             MovimientoDetalle detalle = new MovimientoDetalle();
             detalle.setMovimiento(guardado);
@@ -79,7 +83,11 @@ public class MovimientoService {
 
         // Ahora que "guardado" ya tiene id, el cascade = ALL persiste los detalles
         // sin ambiguedad de orden para Hibernate.
-        movimientoRepository.save(guardado);
+        movimientoRepository.saveAndFlush(guardado);
+
+        // inventario_bodega queda solamente como espejo derivado.
+        // La fuente de verdad es la suma de los movimientos.
+        sincronizarInventarioLegacy(request, origen, destino);
 
         return MovimientoResponse.desde(guardado);
     }
@@ -145,32 +153,125 @@ public class MovimientoService {
         }
     }
 
-    private void aplicarEfectoEnInventario(TipoMovimiento tipo, Bodega origen, Bodega destino, Producto producto, Integer cantidad) {
-        switch (tipo) {
-            case ENTRADA -> sumarStock(destino, producto, cantidad);
-            case SALIDA -> restarStock(origen, producto, cantidad);
-            case TRANSFERENCIA -> {
-                restarStock(origen, producto, cantidad);
-                sumarStock(destino, producto, cantidad);
+    /**
+     * Valida las salidas utilizando exclusivamente los movimientos registrados.
+     * inventario_bodega NO participa en esta decisión.
+     */
+    private void validarStockDesdeMovimientos(
+            MovimientoRequest request,
+            Bodega origen) {
+
+        if (request.getDetalles() == null || request.getDetalles().isEmpty()) {
+            throw new BusinessException("El movimiento debe contener al menos un detalle");
+        }
+
+        Map<Long, Integer> cantidadesPorProducto = new HashMap<>();
+
+        for (MovimientoDetalleRequest detalle : request.getDetalles()) {
+
+            if (detalle.getProductoId() == null
+                    || detalle.getCantidad() == null
+                    || detalle.getCantidad() <= 0) {
+
+                throw new BusinessException(
+                        "La cantidad del movimiento debe ser mayor que cero");
+            }
+
+            // También valida que el producto exista.
+            productoService.buscarPorId(detalle.getProductoId());
+
+            cantidadesPorProducto.merge(
+                    detalle.getProductoId(),
+                    detalle.getCantidad(),
+                    Integer::sum);
+        }
+
+        if (request.getTipo() == TipoMovimiento.ENTRADA) {
+            return;
+        }
+
+        for (Map.Entry<Long, Integer> entry :
+                cantidadesPorProducto.entrySet()) {
+
+            Long productoId = entry.getKey();
+            int cantidadSolicitada = entry.getValue();
+
+            int stockDisponible =
+                    inventarioCalculoService
+                    .stockPorBodega(productoId)
+                    .getOrDefault(origen.getId(), 0);
+
+            if (stockDisponible < cantidadSolicitada) {
+
+                Producto producto =
+                        productoService.buscarPorId(productoId);
+
+                throw new BusinessException(
+                        "Stock insuficiente de '"
+                        + producto.getNombre()
+                        + "' en la bodega '"
+                        + origen.getNombre()
+                        + "' (disponible: "
+                        + stockDisponible
+                        + ", solicitado: "
+                        + cantidadSolicitada
+                        + ")");
             }
         }
     }
 
-    private void sumarStock(Bodega bodega, Producto producto, Integer cantidad) {
-        InventarioBodega inventario = obtenerOCrearInventario(bodega, producto);
-        inventario.setStock(inventario.getStock() + cantidad);
-        inventarioBodegaRepository.save(inventario);
+    /**
+     * Mantiene inventario_bodega únicamente por compatibilidad con
+     * el proyecto original. Su valor se reconstruye desde movimientos.
+     */
+    private void sincronizarInventarioLegacy(
+            MovimientoRequest request,
+            Bodega origen,
+            Bodega destino) {
+
+        Map<Long, Boolean> productosProcesados = new HashMap<>();
+
+        for (MovimientoDetalleRequest detalle : request.getDetalles()) {
+
+            Long productoId = detalle.getProductoId();
+
+            if (productosProcesados.putIfAbsent(
+                    productoId, Boolean.TRUE) != null) {
+                continue;
+            }
+
+            Map<Long, Integer> stockReal =
+                    inventarioCalculoService
+                    .stockPorBodega(productoId);
+
+            if (origen != null) {
+                sincronizarInventario(
+                        origen,
+                        productoId,
+                        stockReal.getOrDefault(origen.getId(), 0));
+            }
+
+            if (destino != null) {
+                sincronizarInventario(
+                        destino,
+                        productoId,
+                        stockReal.getOrDefault(destino.getId(), 0));
+            }
+        }
     }
 
-    private void restarStock(Bodega bodega, Producto producto, Integer cantidad) {
-        InventarioBodega inventario = inventarioBodegaRepository.findByBodegaIdAndProductoId(bodega.getId(), producto.getId())
-                .orElseThrow(() -> new BusinessException(
-                        "El producto '" + producto.getNombre() + "' no tiene inventario registrado en la bodega '" + bodega.getNombre() + "'"));
-        if (inventario.getStock() < cantidad) {
-            throw new BusinessException("Stock insuficiente de '" + producto.getNombre() + "' en la bodega '" + bodega.getNombre()
-                    + "' (disponible: " + inventario.getStock() + ", solicitado: " + cantidad + ")");
-        }
-        inventario.setStock(inventario.getStock() - cantidad);
+    private void sincronizarInventario(
+            Bodega bodega,
+            Long productoId,
+            int stockReal) {
+
+        Producto producto =
+                productoService.buscarPorId(productoId);
+
+        InventarioBodega inventario =
+                obtenerOCrearInventario(bodega, producto);
+
+        inventario.setStock(stockReal);
         inventarioBodegaRepository.save(inventario);
     }
 

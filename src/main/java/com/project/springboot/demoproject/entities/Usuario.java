@@ -18,8 +18,6 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
 
 /**
  * Entidad Usuario. Representa tanto a los usuarios del sistema (ADMIN / EMPLEADO)
@@ -48,8 +46,7 @@ public class Usuario implements Auditable {
     private String email;
 
     @Enumerated(EnumType.STRING)
-    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
-    @Column(nullable = false, columnDefinition = "rol_usuario")
+    @Column(nullable = false, length = 20)
     private Rol rol;
 
     @Column(nullable = false)

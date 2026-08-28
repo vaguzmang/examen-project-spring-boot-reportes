@@ -96,6 +96,9 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.DELETE, "/productos/**").hasAnyRole("ADMIN", "SUPERADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/inventario/**").hasAnyRole("ADMIN", "SUPERADMIN")
 
+                // LogiTrack IQ: movimientos manuales solo ADMIN/SUPERADMIN
+                .requestMatchers(HttpMethod.POST, "/movimientos/**").hasAnyRole("ADMIN", "SUPERADMIN")
+
                 // Auditoria: solo lectura, solo ADMIN/SUPERADMIN
                 .requestMatchers("/auditorias/**").hasAnyRole("ADMIN", "SUPERADMIN")
 
