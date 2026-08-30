@@ -210,7 +210,7 @@ LogiTrack IQ añade inteligencia al inventario:
 - **JDK 17** o superior
 - **Maven 3.8+** (o usar `./mvnw` incluido)
 - **MySQL 8.0+** corriendo en `localhost:3307`
-- Usuario MySQL: `logitrack` / contraseña: `logitrack123`
+- Usuario MySQL: `logitrack` (configurar contraseña propia)
 
 ### Con Docker
 - **Docker** (últimas versiones)
@@ -232,7 +232,7 @@ mysql -u root -p
 CREATE DATABASE logitrack CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 # Crear usuario
-CREATE USER 'logitrack'@'localhost' IDENTIFIED BY 'logitrack123';
+CREATE USER 'logitrack'@'localhost' IDENTIFIED BY 'tu_contraseña_segura';
 GRANT ALL PRIVILEGES ON logitrack.* TO 'logitrack'@'localhost';
 FLUSH PRIVILEGES;
 ```
@@ -244,7 +244,7 @@ Edita `src/main/resources/application.properties`:
 ```properties
 spring.datasource.url=jdbc:mysql://localhost:3307/logitrack?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=America/Bogota&characterEncoding=utf-8
 spring.datasource.username=logitrack
-spring.datasource.password=logitrack123
+spring.datasource.password=tu_contraseña_segura
 spring.sql.init.mode=always
 ```
 
@@ -253,8 +253,8 @@ O usa variables de entorno (recomendado):
 ```bash
 export DB_URL="jdbc:mysql://localhost:3307/logitrack?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=America/Bogota&characterEncoding=utf-8"
 export DB_USERNAME=logitrack
-export DB_PASSWORD=logitrack123
-export JWT_SECRET="0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcd"
+export DB_PASSWORD=tu_contraseña_segura
+export JWT_SECRET="generar_una_clave_aleatoria_larga_y_segura"
 export JWT_EXPIRATION_MS=86400000
 ```
 
@@ -277,14 +277,16 @@ La API estará disponible en `http://localhost:8080`.
 - **Swagger**: `http://localhost:8080/swagger-ui.html`
 - **Dashboard**: `http://localhost:8080/dashboard.html`
 
-**Usuarios de prueba** (creados automáticamente por `data.sql`):
+**Usuarios de prueba** (creados automáticamente por `data.sql` para desarrollo/demostración):
 
-| Username | Password | Rol |
+| Username | Password (test only) | Rol |
 |---|---|---|
 | superadmin | superadmin123 | SUPERADMIN |
 | admin | admin123 | ADMIN |
 | jperez | empleado123 | EMPLEADO |
-| agente | admin123 | AGENTE |
+| agente | (set in .env) | AGENTE |
+
+⚠️ **Cambiar contraseñas en producción**. Los usuarios de prueba son solo para desarrollo local.
 
 ---
 
@@ -332,7 +334,7 @@ Esperado ~30-60 segundos en el primer inicio (mientras se descargan imágenes ba
 - API: `http://localhost:8080`
 - Dashboard: `http://localhost:8080/dashboard.html`
 - Swagger: `http://localhost:8080/swagger-ui.html`
-- MySQL: `localhost:3307` (usuario: `logitrack`, contraseña: `logitrack123`)
+- MySQL: `localhost:3307` (usuario: `logitrack`, contraseña: ver `.env`)
 
 ### 6.5 Detener
 
@@ -675,10 +677,11 @@ GET /ordenes/{id}/pdf
 
 ---
 
-## 12. Dashboard
+## 12. Dashboard / Frontend
 
-Frontend sin framework (HTML/CSS/JavaScript puro) con módulos:
+Frontend sin framework (HTML/CSS/JavaScript puro) ubicado en **`frontend/`** (principal) y replicado en `src/main/resources/static/` para servicio desde el backend.
 
+### Módulos
 - **Dashboard Principal**: resumen de KPIs, últimos movimientos
 - **Ordenes**: CRUD con cambios de estado, PDF
 - **Inventario**: stock por producto y bodega
@@ -689,6 +692,21 @@ Frontend sin framework (HTML/CSS/JavaScript puro) con módulos:
 - **Auditoría**: historial completo de cambios
 - **Usuarios**: gestión de roles (solo ADMIN/SUPERADMIN)
 - **Panel Resumen**: publicación y visualización
+
+### Ejecución
+
+**Opción 1: Servido por Spring Boot** (recomendado para producción)
+```
+http://localhost:8080/
+http://localhost:8080/dashboard.html
+```
+
+**Opción 2: Ejecución independiente con Live Server** (desarrollo)
+- Abre la carpeta `frontend/` en VS Code
+- Instala extensión "Live Server" de Ritwick Dey
+- Haz clic derecho en `index.html` → "Open with Live Server"
+- Frontend ejecutándose en `http://localhost:5500`
+- Configura API en `frontend/js/api.js` si es necesario
 
 **Autenticación**: JWT en sessionStorage, nunca en localStorage
 
@@ -733,7 +751,7 @@ Variables de entorno:
 ```bash
 LOGITRACK_API_URL=http://localhost:8080        # URL de API
 AGENTE_USERNAME=agente                         # Usuario AGENTE
-AGENTE_PASSWORD=admin123                       # Contraseña
+AGENTE_PASSWORD=tu_contrasena_segura           # Contraseña (desde .env)
 MCP_HOST=127.0.0.1                             # Host MCP
 MCP_PORT=3001                                  # Puerto MCP
 ```
@@ -753,7 +771,7 @@ cd mcp-server
 npm install
 LOGITRACK_API_URL=http://localhost:8080 \
 AGENTE_USERNAME=agente \
-AGENTE_PASSWORD=admin123 \
+AGENTE_PASSWORD=tu_contrasena_segura \
 npm start
 ```
 
@@ -930,11 +948,13 @@ Configuración de producción (MySQL local):
 ```properties
 spring.datasource.url=jdbc:mysql://localhost:3307/logitrack?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=America/Bogota&characterEncoding=utf-8
 spring.datasource.username=logitrack
-spring.datasource.password=logitrack123
+spring.datasource.password=${DB_PASSWORD}
 spring.jpa.properties.hibernate.jdbc.time_zone=America/Bogota
-jwt.secret=0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcd
-jwt.expiration-ms=86400000
+jwt.secret=${JWT_SECRET}
+jwt.expiration-ms=${JWT_EXPIRATION_MS}
 ```
+
+**Nota**: Usar variables de entorno en lugar de valores hardcodeados (ver sección 5.2 y 6.1).
 
 ### application-test.properties
 

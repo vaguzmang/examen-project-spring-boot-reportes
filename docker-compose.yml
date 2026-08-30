@@ -9,10 +9,10 @@ services:
     container_name: logitrack-mysql
     
     environment:
-      MYSQL_ROOT_PASSWORD: logitrack123
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: logitrack
-      MYSQL_USER: logitrack
-      MYSQL_PASSWORD: logitrack123
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
       # Timezone para MySQL
       TZ: America/Bogota
     
@@ -34,7 +34,7 @@ services:
     
     # Healthcheck
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "logitrack", "-plogitrack123"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "${DB_USERNAME}", "-p${DB_PASSWORD}"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -60,12 +60,12 @@ services:
     environment:
       # Base de datos (nombre de servicio MySQL en lugar de localhost)
       DB_URL: jdbc:mysql://mysql:3306/logitrack?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=America/Bogota&characterEncoding=utf-8
-      DB_USERNAME: logitrack
-      DB_PASSWORD: logitrack123
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
       
       # JWT
-      JWT_SECRET: 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcd
-      JWT_EXPIRATION_MS: 86400000
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRATION_MS: ${JWT_EXPIRATION_MS}
       
       # SQL Initialization
       SQL_INIT_MODE: always
