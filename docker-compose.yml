@@ -1,0 +1,105 @@
+version: '3.8'
+
+services:
+  # ================================================================
+  # MySQL 8.0 - Base de datos LogiTrack
+  # ================================================================
+  mysql:
+    image: mysql:8.0
+    container_name: logitrack-mysql
+    
+    environment:
+      MYSQL_ROOT_PASSWORD: logitrack123
+      MYSQL_DATABASE: logitrack
+      MYSQL_USER: logitrack
+      MYSQL_PASSWORD: logitrack123
+      # Timezone para MySQL
+      TZ: America/Bogota
+    
+    # Comando con timezone explícito
+    command: 
+      - --default-time-zone='+00:00'
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --max_connections=1000
+    
+    ports:
+      - "3307:3306"
+    
+    # Volumen persistente
+    volumes:
+      - logitrack-mysql-data:/var/lib/mysql
+      - ./src/main/resources/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+      - ./src/main/resources/data.sql:/docker-entrypoint-initdb.d/02-data.sql:ro
+    
+    # Healthcheck
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "logitrack", "-plogitrack123"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    
+    networks:
+      - logitrack-network
+
+  # ================================================================
+  # Spring Boot Application
+  # ================================================================
+  spring-boot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    
+    container_name: logitrack-api
+    
+    depends_on:
+      mysql:
+        condition: service_healthy
+    
+    environment:
+      # Base de datos (nombre de servicio MySQL en lugar de localhost)
+      DB_URL: jdbc:mysql://mysql:3306/logitrack?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=America/Bogota&characterEncoding=utf-8
+      DB_USERNAME: logitrack
+      DB_PASSWORD: logitrack123
+      
+      # JWT
+      JWT_SECRET: 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcd
+      JWT_EXPIRATION_MS: 86400000
+      
+      # SQL Initialization
+      SQL_INIT_MODE: always
+      
+      # Server
+      SERVER_PORT: 8080
+      
+      # Timezone
+      TZ: America/Bogota
+    
+    ports:
+      - "8080:8080"
+    
+    # Healthcheck
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/swagger-ui.html"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    
+    networks:
+      - logitrack-network
+
+# ====================================================================
+# Volúmenes
+# ====================================================================
+volumes:
+  logitrack-mysql-data:
+    driver: local
+
+# ====================================================================
+# Red compartida
+# ====================================================================
+networks:
+  logitrack-network:
+    driver: bridge
