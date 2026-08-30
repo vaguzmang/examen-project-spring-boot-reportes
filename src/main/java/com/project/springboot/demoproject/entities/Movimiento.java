@@ -1,6 +1,7 @@
 package com.project.springboot.demoproject.entities;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,7 +40,7 @@ public class Movimiento implements Auditable {
     private Long id;
 
     @Column(nullable = false)
-    private LocalDateTime fecha = LocalDateTime.now();
+    private LocalDateTime fecha = LocalDateTime.now(ZoneId.of("America/Bogota"));
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)

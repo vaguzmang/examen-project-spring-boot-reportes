@@ -1,6 +1,7 @@
 package com.project.springboot.demoproject.entities;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 import com.project.springboot.demoproject.audit.Auditable;
 import com.project.springboot.demoproject.audit.AuditoriaEntityListener;
@@ -53,7 +54,7 @@ public class Usuario implements Auditable {
     private Boolean activo = true;
 
     @Column(name = "creado_en", nullable = false, updatable = false)
-    private LocalDateTime creadoEn = LocalDateTime.now();
+    private LocalDateTime creadoEn = LocalDateTime.now(ZoneId.of("America/Bogota"));
 
     @Override
     public String getNombreEntidad() {

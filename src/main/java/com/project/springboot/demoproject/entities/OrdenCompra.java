@@ -2,6 +2,7 @@ package com.project.springboot.demoproject.entities;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 import com.project.springboot.demoproject.audit.Auditable;
 import com.project.springboot.demoproject.audit.AuditoriaEntityListener;
@@ -44,7 +45,7 @@ public class OrdenCompra implements Auditable {
     private BigDecimal total;
 
     @Column(name = "fecha_creacion", nullable = false)
-    private LocalDateTime fechaCreacion = LocalDateTime.now();
+    private LocalDateTime fechaCreacion = LocalDateTime.now(ZoneId.of("America/Bogota"));
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)

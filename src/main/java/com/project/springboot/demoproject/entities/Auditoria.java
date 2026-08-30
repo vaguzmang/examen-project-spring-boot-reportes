@@ -1,6 +1,7 @@
 package com.project.springboot.demoproject.entities;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 import com.project.springboot.demoproject.enums.TipoOperacionAuditoria;
 
@@ -41,7 +42,7 @@ public class Auditoria {
     private TipoOperacionAuditoria tipoOperacion;
 
     @Column(name = "fecha_hora", nullable = false)
-    private LocalDateTime fechaHora = LocalDateTime.now();
+    private LocalDateTime fechaHora = LocalDateTime.now(ZoneId.of("America/Bogota"));
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usuario_id", nullable = false)
