@@ -38,3 +38,4 @@ out/
 mcp-server/node_modules/
 mcp-server/.env
 .env
+*:Zone.Identifier
