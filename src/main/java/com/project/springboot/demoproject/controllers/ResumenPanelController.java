@@ -38,10 +38,11 @@ public class ResumenPanelController {
 
     private static final Set<String> CAMPOS_ALERTA =
             Set.of(
-                "mensaje",
                 "severidad",
-                "ordenId",
+                "titulo",
+                "detalle",
                 "productoId",
+                "ordenId",
                 "bodegaId"
             );
 
@@ -121,6 +122,13 @@ public class ResumenPanelController {
                 throw new BusinessException(
                         "La alerta contiene campos no permitidos");
             }
+
+            if (!textoObligatorio(alerta, "severidad")
+                    || !textoObligatorio(alerta, "titulo")
+                    || !textoObligatorio(alerta, "detalle")) {
+                throw new BusinessException(
+                        "Cada alerta requiere severidad, titulo y detalle");
+            }
         }
 
         for (JsonNode accion : acciones) {
@@ -134,7 +142,22 @@ public class ResumenPanelController {
                 throw new BusinessException(
                         "La acción sugerida contiene campos no permitidos");
             }
+
+            if (!textoObligatorio(accion, "tipo")
+                    || !textoObligatorio(accion, "descripcion")) {
+                throw new BusinessException(
+                        "Cada acción requiere tipo y descripcion");
+            }
         }
+    }
+
+    private boolean textoObligatorio(
+            JsonNode node,
+            String campo) {
+
+        return node.has(campo)
+                && node.get(campo).isTextual()
+                && !node.get(campo).asText().isBlank();
     }
 
     private Set<String> campos(JsonNode node) {

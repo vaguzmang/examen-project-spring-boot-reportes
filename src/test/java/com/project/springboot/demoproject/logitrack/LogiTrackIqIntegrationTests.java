@@ -253,8 +253,9 @@ class LogiTrackIqIntegrationTests {
                   "narrativa":"Este resumen invalido no debe reemplazar al anterior.",
                   "alertas":[
                     {
-                      "mensaje":"Alerta incorrecta",
                       "severidad":"CRITICA",
+                      "titulo":"Alerta incorrecta",
+                      "detalle":"Severidad invalida para la prueba",
                       "productoId":%d
                     }
                   ],
@@ -293,8 +294,9 @@ class LogiTrackIqIntegrationTests {
                   "narrativa":"Resumen que referencia un producto que no existe en el sistema.",
                   "alertas":[
                     {
-                      "mensaje":"Producto inexistente",
                       "severidad":"ALTA",
+                      "titulo":"Producto inexistente",
+                      "detalle":"Referencia inexistente para la prueba",
                       "productoId":999999999
                     }
                   ],
@@ -468,8 +470,9 @@ class LogiTrackIqIntegrationTests {
                   "narrativa":"%s",
                   "alertas":[
                     {
-                      "mensaje":"Revisar producto",
                       "severidad":"ALTA",
+                      "titulo":"Revisar producto",
+                      "detalle":"Revisar producto y sus existencias",
                       "productoId":%d
                     }
                   ],

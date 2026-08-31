@@ -415,7 +415,7 @@ spring.jpa.properties.hibernate.jdbc.time_zone=America/Bogota
 
 - **AGENTE NO puede**: aprobar órdenes, recibir órdenes, cancelar órdenes, crear movimientos manuales
 - **Cambio de estado** de orden: solo ADMIN/SUPERADMIN
-- **Aprobación de orden**: crea automáticamente movimiento ENTRADA en la misma transacción
+- **Recepción de orden (APROBADA → RECIBIDA)**: crea automáticamente movimiento ENTRADA en la misma transacción
 - **PDF de orden**: se elimina al cambiar estado (invalida PDF anterior)
 
 ### Auditoría
@@ -438,6 +438,15 @@ Visible en dashboard módulo **Auditoría**.
 ```
 GET /kpis
 ```
+
+**Contrato canónico de la rúbrica**:
+- `calculadoEn`
+- `ocupacionPorBodega`
+- `productosEnQuiebre`
+- `productosEnRiesgo`
+- `ordenesPorAprobar` (`cantidad`, `montoTotal`)
+- `movimientosAyer` (`entrada`, `salida`, `transferencia`)
+
 Retorna indicadores principales:
 - `productosQuiebre` — stock total == 0
 - `productosRiesgo` — stock < punto de reorden
@@ -585,7 +594,8 @@ Content-Type: application/json
   "narrativa": "Resumen operativo del día con análisis de KPIs y alertas. Texto entre 20 y 500 caracteres.",
   "alertas": [
     {
-      "mensaje": "Producto bajo stock",
+      "titulo": "Producto en riesgo",
+      "detalle": "Producto bajo su punto de reorden.",
       "severidad": "ALTA",
       "productoId": 1,
       "ordenId": null,
@@ -621,7 +631,7 @@ Content-Type: application/json
 GET /panel/resumen
 ```
 
-Retorna el último resumen válido (si existe), o HTTP 400.
+Retorna el último resumen válido (si existe), o HTTP 404 si no existe.
 
 ---
 

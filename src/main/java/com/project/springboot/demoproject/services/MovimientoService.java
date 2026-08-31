@@ -1,6 +1,7 @@
 package com.project.springboot.demoproject.services;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,7 +57,7 @@ public class MovimientoService {
         validarStockDesdeMovimientos(request, origen);
 
         Movimiento movimiento = new Movimiento();
-        movimiento.setFecha(LocalDateTime.now());
+        movimiento.setFecha(LocalDateTime.now(ZoneId.of("America/Bogota")));
         movimiento.setTipo(request.getTipo());
         movimiento.setUsuario(usuarioActual);
         movimiento.setBodegaOrigen(origen);

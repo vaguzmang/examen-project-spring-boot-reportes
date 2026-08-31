@@ -12,6 +12,7 @@ import com.project.springboot.demoproject.audit.CurrentUserProvider;
 import com.project.springboot.demoproject.dto.ResumenPanelRequest;
 import com.project.springboot.demoproject.entities.ResumenPanel;
 import com.project.springboot.demoproject.exception.BusinessException;
+import com.project.springboot.demoproject.exception.ResourceNotFoundException;
 import com.project.springboot.demoproject.repositories.BodegaRepository;
 import com.project.springboot.demoproject.repositories.OrdenCompraRepository;
 import com.project.springboot.demoproject.repositories.ProductoRepository;
@@ -75,7 +76,7 @@ public class ResumenPanelService {
             resumenPanelRepository
                 .findTopByOrderByFechaDesc()
                 .orElseThrow(() ->
-                    new BusinessException(
+                    new ResourceNotFoundException(
                         "No existe resumen publicado"));
 
         try {

@@ -7,64 +7,64 @@
 - [x] Crear plan de tareas.
 
 ## TDD RED
-- [ ] Prueba consumo 0 -> cobertura null y SIN_CONSUMO.
-- [ ] Prueba stock == puntoReorden -> no riesgo.
-- [ ] Prueba cantidad <= 0 -> 400.
-- [ ] Prueba CANCELADA -> APROBADA -> 400.
-- [ ] Prueba APROBADA -> RECIBIDA crea ENTRADA.
-- [ ] Prueba AGENTE intenta aprobar -> 403.
-- [ ] Prueba resumen inválido conserva anterior.
-- [ ] Prueba PDF BORRADOR.
-- [ ] Prueba integración PATCH estado o POST resumen.
-- [ ] Guardar evidencia RED.
+- [x] Prueba consumo 0 -> cobertura null y SIN_CONSUMO.
+- [x] Prueba stock == puntoReorden -> no riesgo.
+- [x] Prueba cantidad <= 0 -> 400.
+- [x] Prueba CANCELADA -> APROBADA -> 400.
+- [x] Prueba APROBADA -> RECIBIDA crea ENTRADA.
+- [x] Prueba AGENTE intenta aprobar -> 403.
+- [x] Prueba resumen inválido conserva anterior.
+- [x] Prueba PDF BORRADOR.
+- [x] Prueba integración PATCH estado o POST resumen.
+- [x] Guardar evidencia RED.
 
 ## Backend
-- [ ] Crear Proveedor.
-- [ ] Agregar proveedorPrincipal a Producto.
-- [ ] Crear OrdenCompra.
-- [ ] Crear ResumenPanel.
-- [ ] Agregar AGENTE.
-- [ ] Implementar stock desde movimientos.
-- [ ] Implementar consumo diario.
-- [ ] Implementar punto de reorden.
-- [ ] Implementar cobertura.
-- [ ] Implementar KPIs.
-- [ ] Implementar riesgos.
-- [ ] Implementar bodegas críticas.
-- [ ] Implementar órdenes.
-- [ ] Implementar recepción transaccional.
-- [ ] Implementar PDF.
-- [ ] Implementar resumen.
-- [ ] Implementar seguridad.
-- [ ] Ejecutar GREEN.
+- [x] Crear Proveedor.
+- [x] Agregar proveedorPrincipal a Producto.
+- [x] Crear OrdenCompra.
+- [x] Crear ResumenPanel.
+- [x] Agregar AGENTE.
+- [x] Implementar stock desde movimientos.
+- [x] Implementar consumo diario.
+- [x] Implementar punto de reorden.
+- [x] Implementar cobertura.
+- [x] Implementar KPIs.
+- [x] Implementar riesgos.
+- [x] Implementar bodegas críticas.
+- [x] Implementar órdenes.
+- [x] Implementar recepción transaccional.
+- [x] Implementar PDF.
+- [x] Implementar resumen.
+- [x] Implementar seguridad.
+- [x] Ejecutar GREEN.
 
 ## MCP
-- [ ] Crear servidor MCP.
-- [ ] Implementar exactamente seis herramientas.
-- [ ] Crear SKILL.md.
+- [x] Crear servidor MCP.
+- [x] Implementar exactamente seis herramientas.
+- [x] Crear SKILL.md.
 
 ## n8n
-- [ ] Crear flujo Resumen diario de inventario.
-- [ ] Schedule 06:00 America/Bogota.
-- [ ] Integrar MCP.
-- [ ] Crear máximo una orden por ejecución.
+- [x] Crear flujo Resumen diario de inventario.
+- [x] Schedule 06:00 America/Bogota.
+- [x] Integrar MCP.
+- [x] Crear máximo una orden por ejecución.
 
 ## Frontend
-- [ ] HTML/CSS/JS vanilla.
-- [ ] KPIs.
-- [ ] riesgos.
-- [ ] órdenes BORRADOR.
-- [ ] PDF.
-- [ ] botón Aprobar solo ADMIN.
+- [x] HTML/CSS/JS vanilla.
+- [x] KPIs.
+- [x] riesgos.
+- [x] órdenes BORRADOR.
+- [x] PDF.
+- [x] botón Aprobar solo ADMIN.
 
 ## MySQL
-- [ ] Migrar PostgreSQL a MySQL.
-- [ ] Eliminar tipos PostgreSQL específicos.
-- [ ] Verificar schema y data.sql.
+- [x] Migrar PostgreSQL a MySQL.
+- [x] Eliminar tipos PostgreSQL específicos.
+- [x] Verificar schema y data.sql.
 
 ## Entrega
-- [ ] evidencia-sdd.md
-- [ ] README.
-- [ ] Swagger.
-- [ ] Diagrama.
-- [ ] Video 4-6 minutos.
+- [x] evidencia-sdd.md
+- [x] README.
+- [x] Swagger.
+- [x] Diagrama.
+- [x] Video 4-6 minutos.

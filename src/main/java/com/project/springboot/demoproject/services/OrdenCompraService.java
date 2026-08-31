@@ -2,6 +2,7 @@ package com.project.springboot.demoproject.services;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -66,7 +67,7 @@ public class OrdenCompraService {
                 .multiply(BigDecimal.valueOf(request.getCantidad()));
 
         orden.setTotal(total);
-        orden.setFechaCreacion(LocalDateTime.now());
+        orden.setFechaCreacion(LocalDateTime.now(ZoneId.of("America/Bogota")));
         orden.setEstado(EstadoOrdenCompra.BORRADOR);
         orden.setCreadoPor(usuario);
 

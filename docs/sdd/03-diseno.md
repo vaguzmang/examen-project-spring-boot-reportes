@@ -89,3 +89,13 @@ Movimientos
 El proyecto actual utiliza PostgreSQL.
 El entregable final debe alinearse con MySQL.
 La nueva lógica debe evitar nuevas dependencias específicas de PostgreSQL.
+
+
+## Estado final de persistencia
+
+El backend heredado partía de PostgreSQL. La implementación entregada quedó
+migrada y reproducible sobre **MySQL 8.0**.
+
+Diagrama final:
+
+`n8n → MCP → API Spring Boot → MySQL → dashboard`

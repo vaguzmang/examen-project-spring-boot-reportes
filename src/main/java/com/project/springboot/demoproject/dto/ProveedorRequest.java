@@ -3,6 +3,7 @@ package com.project.springboot.demoproject.dto;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
@@ -16,6 +17,7 @@ public class ProveedorRequest {
     @Size(max = 200, message = "El contacto no puede superar 200 caracteres")
     private String contacto;
 
+    @NotNull(message = "Los dias de entrega son obligatorios")
     @Min(value = 1, message = "Los dias de entrega deben ser minimo 1")
     @Max(value = 90, message = "Los dias de entrega deben ser maximo 90")
     private Integer diasEntrega;

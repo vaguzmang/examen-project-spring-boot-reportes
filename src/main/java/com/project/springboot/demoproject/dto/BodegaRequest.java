@@ -18,7 +18,7 @@ public class BodegaRequest {
     private String ubicacion;
 
     @NotNull(message = "La capacidad es obligatoria")
-    @Min(value = 0, message = "La capacidad no puede ser negativa")
+    @Min(value = 1, message = "La capacidad debe ser mayor que cero")
     private Integer capacidad;
 
     @NotBlank(message = "El encargado es obligatorio")

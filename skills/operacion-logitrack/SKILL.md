@@ -103,3 +103,9 @@ Nunca:
 `n8n → MySQL`
 ni
 `MCP → MySQL`
+
+
+### Formato de alertas
+
+Cada alerta usa `severidad`, `titulo`, `detalle` y al menos uno de
+`productoId`, `ordenId` o `bodegaId`. No se agregan propiedades adicionales.

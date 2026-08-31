@@ -570,8 +570,16 @@ function renderizarAlertaIa(alerta) {
             </span>
 
             <span>
+                <strong>
+                    ${escaparHtml(
+                        alerta.titulo || "Alerta"
+                    )}
+                </strong>
+                <br>
                 ${escaparHtml(
-                    alerta.mensaje || ""
+                    alerta.detalle ||
+                    alerta.mensaje ||
+                    ""
                 )}
             </span>
 
